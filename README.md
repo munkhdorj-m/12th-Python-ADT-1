@@ -1,31 +1,63 @@
-# Python Bubble Sort and Insertion Sort
+# Python Stack
 
-Python Bubble Sort and Insertion Sort PDF:
-
-https://drive.google.com/file/d/1DpK-S8RL9LZenG2QnSlxk7drOTGo5xVL/view?usp=sharing
+Read the Abstract Data Types lecture (Stack section) before you start.
+Abstract Data Types Lecture:
+https://drive.google.com/file/d/1jXGQdSvuUYjGXl-PUuHMUzKWEBGQoARL/view?usp=sharing
 
 **Rules for this assignment**
 
-- Do **not** use `sorted()` or `.sort()`. The tests check for this — write the
-  algorithms yourself.
+- Do **not** use `.append()` or `.pop()` inside `Push()` and `Pop()`.
+  Change `TopOfStack` yourself and use `Stack[TopOfStack]`. The tests check for this.
+- Functions **return** their answer. Only print when the exercise says so.
+- Use `global Stack, TopOfStack` in every function that changes them.
 
+---
 
 ## Exercise 1
 
 **Problem:**
 
-`bubble_sort(data)`
+Build a stack that holds **10** integers.
 
-Sort `data` from smallest to largest using **bubble sort**, and return it.
-Stop early if a pass makes no swaps.
+- `Stack` → a global array of **10** elements, all set to `-1`
+- `TopOfStack` → a global integer, set to `-1` (the stack is empty)
+
+Then write two functions:
+
+- `Push(DataToPush)`
+  - If the stack is full (`TopOfStack` is 9), return `False`
+  - Otherwise add 1 to `TopOfStack`, store `DataToPush` at `Stack[TopOfStack]`,
+    and return `True`
+
+- `Pop()`
+  - If the stack is empty (`TopOfStack` is -1), return `-1`
+  - Otherwise return the item at `Stack[TopOfStack]`, and take 1 off `TopOfStack`
+
+**Careful with the order in Pop():** read the item **first**, then move `TopOfStack`.
 
 **Example:**
 
-    Example Input:
-        data = [5, 6, 1, 3]
+    Input:
+      print(Push(10))
+      print(Push(20))
+      print(Push(30))
+      print(Pop())
+      print(Pop())
+      print(TopOfStack)
 
-    Program Output:
-        [1, 3, 5, 6]
+    Output:
+      True
+      True
+      True
+      30
+      20
+      0
+
+    Input (on an empty stack):
+      print(Pop())
+
+    Output:
+      -1
 
 ---
 
@@ -33,33 +65,47 @@ Stop early if a pass makes no swaps.
 
 **Problem:**
 
-`bubble_sort_trace(data)`
+Write four more functions that use the stack from Exercise 1.
 
-Sort `data` using bubble sort, and return a **trace**: a list showing what
-`data` looked like after each pass.
+- `Peek()` → returns the top item **without removing it**. Returns `-1` if the stack is empty.
+- `IsEmpty()` → returns `True` if the stack is empty, otherwise `False`.
+- `Size()` → returns **how many items** are in the stack.
+- `ReverseList(Numbers)` → `Numbers` is a list of integers.
+  - Push each number onto the stack.
+  - If `Push()` returns `False`, print `Stack full` **once** and stop pushing.
+  - Then pop **every** item off the stack into a new list, and return that list.
 
-- After every pass that made **at least one swap**, add a copy of `data` to the trace.
-- A pass with **no swaps** means the list is sorted — stop, and do **not** add it.
-- If the list is already sorted (or empty), the trace is `[]`.
+*Hint:* `Size()` is **not** `len(Stack)` — the array always has 10 elements.
+Think about what `TopOfStack` tells you.
 
 **Example:**
 
-    Example Input:
-        data = [5, 6, 1, 3]
+    Input:
+      Push(8)
+      Push(3)
+      print(Peek())
+      print(Size())
+      print(IsEmpty())
 
-    Program Output:
-        [[5, 1, 3, 6], [1, 3, 5, 6]]
+    Output:
+      3
+      2
+      False
 
-    Pass 1 moves 6 to the end      -> [5, 1, 3, 6]
-    Pass 2 moves 5 into place      -> [1, 3, 5, 6]
-    Pass 3 makes no swaps          -> stop, not added
+    Input (on an empty stack):
+      print(ReverseList([5, 9, 2, 7]))
 
-    Example Input:
-        data = [1, 2, 3]
+    Output:
+      [7, 2, 9, 5]
 
-    Program Output:
-        []
+    Input (on an empty stack):
+      print(ReverseList([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]))
 
+    Output:
+      Stack full
+      [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+Only the first 10 numbers fit. Numbers 11 and 12 are never pushed.
 
 ---
 
@@ -67,78 +113,31 @@ Sort `data` using bubble sort, and return a **trace**: a list showing what
 
 **Problem:**
 
-`insertion_sort(data)`
+`Balanced(Expression)`
 
-Sort `data` from smallest to largest using **insertion sort**, and return it.
+`Expression` is a string. Return `True` if its brackets are **balanced**,
+otherwise `False`.
 
-**Example:**
+Brackets are balanced when every opening bracket `(` `[` `{` has a matching
+closing bracket `)` `]` `}` of the **same type**, closed in the **right order**.
+All other characters are ignored.
 
-    Example Input:
-        data = [5, 6, 1, 3]
+Use your stack:
 
-    Program Output:
-        [1, 3, 5, 6]
-
----
-
-## Exercise 4
-
-**Problem:**
-
-`insertion_sort_trace(data)`
-
-Sort `data` using insertion sort, and return a trace of what `data` looked like
-after **every step** (`i = 1, 2, 3, ...` up to the end).
-
-- Add a copy after **every** step — even if nothing moved in that step.
-- A list with 0 or 1 items has no steps, so its trace is `[]`.
+1. **Empty the stack first** by setting `TopOfStack` to `-1`.
+2. Go through the string one character at a time.
+3. Opening bracket → `Push()` it. If `Push()` returns `False`, return `False`.
+4. Closing bracket → `Pop()` the top item. If it is **not** the matching opening
+   bracket, return `False`. (If the stack was empty, `Pop()` returns `-1` — that doesn't match either.)
+5. At the end, the brackets are balanced **only if the stack is empty**.
 
 **Example:**
 
-    Example Input:
-        data = [5, 6, 1, 3]
-
-    Program Output:
-        [[5, 6, 1, 3], [1, 5, 6, 3], [1, 3, 5, 6]]
-
-    Step i = 1: key = 6, nothing moves     -> [5, 6, 1, 3]
-    Step i = 2: key = 1, goes to the front -> [1, 5, 6, 3]
-    Step i = 3: key = 3, goes after 1      -> [1, 3, 5, 6]
-
-    Example Input:
-        data = [1, 2, 3]
-
-    Program Output:
-        [[1, 2, 3], [1, 2, 3]]
-
-Notice the difference from Exercise 2: bubble sort can **stop early**,
-but insertion sort always does every step.
-
----
-
-## Exercise 5
-
-**Problem:**
-
-`rank_students(records)`
-
-`records` is a list of students. Each student is a list `[name, score]`.
-
-Sort the students by score, **highest first**, using **insertion sort**,
-and return the list.
-
-If two students have the **same score**, they must stay in the same order they
-were in originally.
-
-**Example:**
-
-    Example Input:
-        records = [["Bat", 78], ["Saraa", 91], ["Anu", 78], ["Dorj", 91], ["Tuya", 85]]
-
-    Program Output:
-        [["Saraa", 91], ["Dorj", 91], ["Tuya", 85], ["Bat", 78], ["Anu", 78]]
-
-Saraa was before Dorj, and Bat was before Anu — so they stay that way.
-
+    Input:                            Output:
+      Balanced("([]{})")                True
+      Balanced("(a + b) * [c - d]")     True
+      Balanced("([)]")                  False    ) closes [ - wrong type
+      Balanced("(()")                   False    one ( is never closed
+      Balanced("())")                   False    the last ) has nothing to close
 
 ---
