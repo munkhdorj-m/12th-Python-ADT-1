@@ -1,27 +1,43 @@
 # You can remove 'pass' if you written code in the function
-# Do NOT use sorted() or .sort() - write the algorithms yourself.
+# Do NOT use .append() or .pop() inside Push() and Pop() - move TopOfStack yourself.
 
 # Exercise 1
-def bubble_sort(data):
+Stack = []
+TopOfStack = -1
+# Write code here to fill Stack with 10 elements, all -1
+
+def Push(DataToPush):
     # Write your code here
     pass
+
+
+def Pop():
+    # Write your code here
+    pass
+
 
 # Exercise 2
-def bubble_sort_trace(data):
+def Peek():
     # Write your code here
     pass
+
+
+def IsEmpty():
+    # Write your code here
+    pass
+
+
+def Size():
+    # Write your code here
+    pass
+
+
+def ReverseList(Numbers):
+    # Write your code here
+    pass
+
 
 # Exercise 3
-def insertion_sort(data):
-    # Write your code here
-    pass
-
-# Exercise 4
-def insertion_sort_trace(data):
-    # Write your code here
-    pass
-
-# Exercise 5
-def rank_students(records):
+def Balanced(Expression):
     # Write your code here
     pass
