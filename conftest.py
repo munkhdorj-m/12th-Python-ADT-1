@@ -3,15 +3,18 @@
 import pytest
 
 HINTS = [
-    ["list index out of range",
-     "Your loop goes past the edge of the list.\n"
-     "  Bubble sort:    the inner loop compares data[j] with data[j + 1],\n"
-     "                  so j must stop one place before the end.\n"
-     "  Insertion sort: the while loop needs  j >= 0  so it stops at the\n"
-     "                  start of the list."],
+    ["local variable",
+     "Your function changes a global variable without saying so.\n"
+     "Add this line at the top of the function:\n"
+     "    global Stack, TopOfStack"],
+
+    ["index out of range",
+     "You used an index outside the array.\n"
+     "  - Did you fill Stack with 10 elements (all -1) at the start?\n"
+     "  - Does Push check for full (TopOfStack == 9) BEFORE adding 1?"],
 
     ["'NoneType' object",
-     "Something is None (nothing). Your function probably forgot to 'return'\n"
+     "Something is None (nothing). A function probably forgot to 'return'\n"
      "its answer, or you left 'pass' in it."],
 
     ["unsupported operand type(s)",
@@ -33,10 +36,7 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_assertrepr_compare(op, left, right):
-    if op != "==":
-        return None
-
-    if left is None:
+    if op == "==" and left is None:
         return [
             "Your function returned None (nothing).",
             "",
@@ -46,18 +46,4 @@ def pytest_assertrepr_compare(op, left, right):
             "",
             "The test expected: " + repr(right),
         ]
-
-    if (isinstance(left, list) and len(left) > 1
-            and isinstance(left[0], list)
-            and all(row is left[0] for row in left)):
-        return [
-            "Every row of your trace is the SAME list.",
-            "",
-            "You appended the list itself, so when the list changed later,",
-            "every row you had already saved changed too.",
-            "Append a copy instead:   trace.append(data.copy())",
-            "",
-            "The test expected: " + repr(right),
-        ]
-
     return None
